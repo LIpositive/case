@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            #banner {
+                width: 533px;
+                height: 300px;
+                outline: 10px solid #fff666;
+                margin: 0 auto;
+
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="banner">
+
+        </div>
+        <script>
+            var bannerDiv = document.getElementById("banner");
+            createBannerArea(bannerDiv, [{
+                imgurl: "./imge/1.jpg"
+            },
+            {
+                imgurl: "./imge/2.jpg"
+            },
+            {
+                imgurl: "./imge/3.jpg"
+            }
+            ])
+
+            //demo.js
+            /**
+ * 
+ * @param {*} areaDom dom元素，轮播区域
+ * @param {*} options 轮播配置
+ */
+
+function createBannerArea(areaDom, options) {
+    var imgArea = document.createElement('div'); //图片区域
+    var numberArea = document.createElement('div'); //角标
+    var curIndex = 0; //图片显示的第几张
+    var changeTimer = null; //角标定时器
+    var changeDuration = 2500; //图片切换定时器时间
+    var timer = null; //图片定时器
+    //创建图片区域
+    initImge();
+
+    //角标区域
+    inittNumbers();
+
+    //设置状态.
+    setStatus();
+
+    autoChange();
+
+    //插入图片和样式
+    function initImge() {
+        imgArea.style.wdith = '100%';
+        imgArea.style.height = '100%';
+        imgArea.style.display = 'flex';
+        imgArea.style.overflow = 'hidden';
+        for (var i = 0; i < options.length; i++) { //循环创建
+            var obj = options[i];
+            var img = document.createElement('img')
+            img.src = obj.imgurl;
+            img.style.wdith = '100%';
+            img.style.height = '100%';
+            img.style.marginLeft = '0';
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', function () { //图片链接事件
+                location.herf = options[i].link;
+            })
+            imgArea.appendChild(img); //插入
+
+        }
+        imgArea.addEventListener('mouseenter', function () { //鼠标悬浮和离开时候的运动停止和开始
+            clearInterval(changeTimer);
+            changeTimer = null;
+        })
+        imgArea.addEventListener('mouseleave', function () {
+            autoChange();
+        })
+        areaDom.appendChild(imgArea); //再插入
+    }
+    //加入角标
+    function inittNumbers() {
+        numberArea.style.textAlign = 'center';
+        numberArea.style.marginTop = '-25px';
+        for (let i = 0; i < options.length; i++) {
+            var sp = document.createElement('span');
+            sp.style.width = '12px';
+            sp.style.height = '12px';
+            sp.style.background = 'lightgray';
+            sp.style.display = 'inline-block';
+            sp.style.margin = '0 7px';
+            sp.style.borderRadius = '50%';
+            sp.style.cursor = 'pointer';
+            sp.addEventListener('click', function () { //角标点击事件
+                curIndex = i; //更改值
+                setStatus(); //进行再运动
+            })
+            numberArea.appendChild(sp); //插入
+
+        }
+        areaDom.appendChild(numberArea); //再插入
+    }
+
+    //区域状态
+    function setStatus() {
+        //角标
+        for (var i = 0; i < options.length; i++) {
+            if (i === curIndex) { //x选中
+                numberArea.children[i].style.background = '#be926f'
+            } else { //普通状态
+                numberArea.children[i].style.background = 'lightgray'
+
+            }
+
+        }
+        //图片切换运动
+        var start = parseInt(imgArea.children[0].style.marginLeft); //当前元素外边距
+        // console.log(start);
+        var end = curIndex * -100; //要达到的边距
+        var dis = end - start; //要运动的边距
+        var duration = 500;
+        var speed = dis / duration; //取得速度
+
+        if (timer) {
+            clearInterval(timer); //判断存在
+        }
+        timer = setInterval(function () { //赋值
+            start += speed * 20;
+            imgArea.children[0].style.marginLeft = start + '%';
+            if (Math.abs(end - start) < 1) {
+                imgArea.children[0].style.marginLeft = end + '%';
+                clearInterval(timer); //清除
+            }
+        }, 20);
+
+
+
+    }
+
+
+    //运动定时器
+    function autoChange() {
+        if (changeTimer) { //判断存在
+            return;
+        }
+        changeTimer = setInterval(function () {
+            if (curIndex === options.length - 1) {
+                curIndex = 0;
+            } else {
+                curIndex++;
+            }
+            setStatus();
+        }, changeDuration);
+    }
+
+
+}
+        </script>
+    </body>
+
+</html>
