@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+
+    <body>
+        <input type="text" id="iup">
+        <script>
+            var oInp = document.getElementById('iup');
+
+            function debounce(func, wait) {
+                var timeout = null;
+                //保证只会有一个计时器存在
+                return function () {
+                    var _this = this,
+                        _arg = arguments;
+                    //计时器内部的this指向是widow
+                    // 执行函数内部的实参列表也需要
+                    clearTimeout(timeout);
+                    timeout = setTimeout(function () {
+                        func.apply(_this, _arg)
+                    }, wait);
+                }
+            }
+
+            function ajax(e) {
+                console.log(e, this.value);
+            }
+            oInp.oninput = debounce(ajax, 2000) //每次触发都会生成一个新的计时器达到防抖的作用
+        </script>
+
+    </body>
+
+</html>
