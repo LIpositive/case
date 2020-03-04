@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+
+    <body>
+        <div id="show">0</div>
+        <button id="btn">click</button>
+        <script>
+            var oBtn = document.getElementById('btn');
+            var oDiv = document.getElementById('show');
+
+            function throttle(func, wait) { //函数和时间间距
+                var previous = 0;
+                return function (e) {
+                    var now = new Date().getTime();
+                    if (now - previous > wait) { //触发事件的时间大于wait才传值
+                        func.apply(this, arguments);
+                        previous = now; //时间戳更新
+                    }
+                }
+            }
+
+            function ajax(e) {
+                console.log(this, e);
+                oDiv.innerText = parseInt(oDiv.innerText) + 1;
+            }
+            oBtn.onclick = throttle(ajax, 2000) //判断事件触发时间的间距取传值达到节流
+        </script>
+
+    </body>
+
+</html>
