@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+                function buble(arr1) {//封装成函数
+                var arr =arr1;//取值
+                var temp = unll;
+                if (arr instanceof Array && arr.length > 1) {//判断数组存在
+                    for (var i = 0; i < arr.length - 1; i++) {//i决定j循环的比较次数
+                        for (var j = 0; j < arr.length - 1 - i; j++) {//循环取值
+                            if (arr[j] > arr[j + 1]) {//比较当前位临近的数值的大小
+                                var temp = arr[j];//存值
+                                arr[j] = arr[j + 1];//后移一位
+                                arr[j + 1] = temp;//赋值给数组
+                            }
+                        }
+                    }
+                }
+                return arr
+            }
+            var arr1 = [1, 9, 6, 2, 4, 7, 8, 5, 3]
+            console.log(buble(arr1));
+        </script>
+    </body>
+</html>
