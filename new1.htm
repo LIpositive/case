@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //new内部实现
+        function create(Con, ...args){
+        // 创建空对象
+        let obj = {};
+        // 设置空对象的原型(链接对象的原型)
+        obj._proto_ = Con.prototype;
+        // 绑定 this 并执行构造函数(为对象设置属性)
+        let result = Con.apply(obj,args)
+        // 如果 result 为object的实例，就返回 obj 对象
+        return result instanceof Object ?  result : obj;
+}
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+
+    <body>
+        <script>
+            //ES6版
+            Function.prototype.newCall = function (obj) {
+                //判断参数传入的值是否为null或者undefined
+                obj = obj ? Object(obj) : window;
+                //this指向设置为调用对象
+                obj.func = this;  
+                //截取参数数组中除了元对象外的参数列表
+                let args = [...arguments].slice(1);
+                //当前保存有this指向和参数内容的变量
+                let res = obj.func(...args);
+                //删除该函数
+                delete obj.func
+                //返回上下文
+                return res;
+            }
+            //ES5
+            Function.prototype.newCall = function (obj) {
+                obj = obj ? Object(obj) : window; 
+                obj.func = this;
+                var args = [];
+                //为取代扩展运算符使用手动分割数组为参数列表
+                for (var i = 1, len = arguments.length; i < len; i++) {
+                    args.push('arguments[' + i + ']');
+                }
+                //args 会自动调用 args.toString() 方法
+                var result = eval('context.func(' + args + ')');
+                delete obj.func
+                return result; 
+            }
+
+            //ES6版
+            Function.prototype.newApply = function (context, arr) {
+                //判断参数传入的值是否为null或者undefined
+                context = context ? Object(context) : window;
+                //this指向设置为调用对象
+                context.fn = this;
+                //当前保存有this指向和参数内容的变量
+                let result;
+                // 判断是否存在第二个参数
+                if (!arr) {
+                    result = context.fn();
+                } else {
+                    //数组参数合并为一个参数列表
+                    result = context.fn(...arr);
+                }
+                //删除该函数
+                delete context.fn
+                //返回上下文
+                return result;
+            }
+
+            //ES5
+            Function.prototype.newApply = function (context, arr) {
+                context = context ? Object(context) : window;
+                context.fn = this;
+                var result;
+                // 判断是否存在第二个参数
+                if (!arr) {
+                    result = context.fn();
+                } else {
+                    //更改传参方法
+                    var args = [];
+                    for (var i = 0, len = arr.length; i < len; i++) {
+                        args.push('arr[' + i + ']');
+                    }
+                    result = eval('context.fn(' + args + ')');
+                }
+                delete context.fn
+                return result;
+            }
+        </script>
+    </body>
+
+</html>
